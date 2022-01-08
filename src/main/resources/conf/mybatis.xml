@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--起别名，实体类所在的包-->
+    <typeAliases>
+        <package name="com.lebrwcd.domain"/>
+    </typeAliases>
+
+    <!--sql mapper文件的位置-->
+    <mappers>
+        <package name="com.lebrwcd.dao"/>
+    </mappers>
+</configuration>

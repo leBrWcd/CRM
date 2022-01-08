@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lebrwcd.dao.StudentDao">
+    <select id="selectStudent" resultType="map">
+        select
+        s.name as sname,
+        c.name as cname
+        from t_student s
+        join t_classroom c
+        on s.classid = c.id;
+  </select>
+</mapper>
