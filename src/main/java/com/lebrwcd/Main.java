@@ -13,5 +13,6 @@ public class Main {
         Date date = new Date();
         String dateStr = dateFormat.format(date);
         System.out.println("CRM客户管理系统项目开始" + dateStr);
+        System.out.println("this is crm version");
     }
 }
