@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lebrwcd.crm.settings.dao.UserDao">
+    <select id="login" resultType="User">
+        SELECT *
+        FROM tbl_user
+        WHERE loginAct = #{loginAct} AND loginPwd = #{loginPwd};
+    </select>
+
+    <!--查询所有用户-->
+    <select id="getUser" resultType="User">
+        select * from tbl_user;
+    </select>
+</mapper>
+

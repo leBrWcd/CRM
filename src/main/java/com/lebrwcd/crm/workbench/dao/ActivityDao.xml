@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lebrwcd.crm.workbench.dao.ActivityDao">
+
+    <select id="getActivityListByName" resultType="Activity">
+
+        select
+            a.id,
+            a.name,
+            u.name as owner,
+            a.startDate,
+            a.endDate
+        from tbl_activity a
+                 join tbl_user u
+                      on a.owner=u.id
+        where a.name like '%' #{aname} '%'
+    </select>
+
+    <select id="getActivityListByNameAndNotByClueId" resultType="Activity">
+
+        select
+        a.id,
+        a.name,
+        u.name as owner,
+        a.startDate,
+        a.endDate
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        where a.name like '%' #{aname} '%' and a.id not in(
+            select
+            activityId
+            from tbl_clue_activity_relation
+            where clueId=#{clueId}
+        )
+
+    </select>
+
+    <select id="getActivityListByclueId" resultType="Activity">
+        select
+        a.name,
+        a.startDate,
+        a.endDate,
+        u.name as owner,
+        r.id as id
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        join tbl_clue_activity_relation r
+        on r.activityId=a.id
+        where r.clueId=#{clueId}
+    </select>
+
+    <insert id="save" parameterType="Activity">
+        insert into tbl_activity(
+            id,owner,name,startDate,endDate,cost,description,createTime,createBy
+        )
+        values(
+            #{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy}
+        );
+    </insert>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+        <!--查询条件可能有也可能没有，所以需要使用动态sql-->
+        <where>
+            <if test="name!=null and name !=''">
+                a.name like '%' #{name} '%'         <!--这里的#{map中的key}-->
+            </if>
+
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'    <!--这里的owner是map中的，也就是前端传递过来的-->
+            </if>
+
+            <if test="startDate!=null and startDate!=''">    <!--如果只填了开始日期，那么查询的时候必须查出
+                                                                 大于开始日期的数据 -->
+                and a.startDate &gt; #{startDate}
+            </if>
+
+            <if test="endDate!=null and endDate!=''">
+                and a.endDate &lt; #{endDate}
+            </if>
+
+        </where>
+
+    </select>
+
+    <select id="getDataListByCondition" resultType="Activity" parameterType="Map">
+        <!--需要查找activity表的id,name,owner(关联tbl_user表的id),startDate,endDate-->
+        select a.id,a.name,u.name as owner,a.startDate,a.endDate
+        from tbl_activity a
+        join tbl_user u
+        on u.id=a.owner
+        <!--查询条件可能有也可能没有，所以需要使用动态sql-->
+        <where>
+            <if test="name!=null and name!=''">
+                a.name like '%' #{name} '%'         <!--这里的#{map中的key}-->
+            </if>
+
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'    <!--这里的owner是map中的，也就是前端传递过来的-->
+            </if>
+
+            <if test="startDate!=null and startDate!=''"><!--如果只填了开始日期，那么查询的时候必须查出大于开始日期的数据 -->
+                and a.startDate &gt; #{startDate}
+            </if>
+
+            <if test="endDate!=null and endDate!=''">
+                and a.endDate &lt; #{endDate}
+            </if>
+        </where>
+       order by a.createTime desc
+       limit #{skipCount},#{pageSize}    <!--limit 1,"2"这是错误的，pageNo和pageSize必须为整形-->
+
+    </select>
+
+    <delete id="delete">
+        delete
+        from tbl_activity
+        where id
+        in
+        <foreach collection="array" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+
+    </delete>
+
+    <select id="getActivityById" resultType="Activity">
+        select *
+        from tbl_activity
+        where id = #{id}
+    </select>
+
+    <update id="update" parameterType="Activity">
+
+        update tbl_activity
+        set
+        owner=#{owner},name=#{name},startDate=#{startDate},endDate=#{endDate},
+        cost=#{cost},description=#{description},editTime=#{editTime},editBy=#{editBy}
+        where id = #{id}
+    </update>
+
+    <select id="getActivityByIdJoinUser" resultType="Activity">
+        select a.id,u.name as owner,a.name,a.startDate,a.endDate,a.cost,a.description,a.createBy,a.createTime,a.editTime,a.editBy
+        from tbl_activity a
+        join tbl_user u
+        on u.id = a.owner
+        where a.id = #{id}
+    </select>
+
+</mapper>

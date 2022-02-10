@@ -3,13 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!--Log4j2-->
+    <settings>
+        <setting name="logImpl" value="LOG4J2" />
+    </settings>
     <!--起别名，实体类所在的包-->
     <typeAliases>
-        <package name="com.lebrwcd.domain"/>
+        <package name="com.lebrwcd.crm.settings.domain"/>
+        <package name="com.lebrwcd.crm.workbench.domain"/>
     </typeAliases>
 
     <!--sql mapper文件的位置-->
     <mappers>
-        <package name="com.lebrwcd.dao"/>
+        <package name="com.lebrwcd.crm.settings.dao"/>
+        <package name="com.lebrwcd.crm.workbench.dao"/>
     </mappers>
+
 </configuration>

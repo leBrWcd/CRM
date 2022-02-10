@@ -3,16 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <!--ContextLoaderListener-->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:conf/applicationContext.xml</param-value>
-    </context-param>
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
 
-    <!--log4j-->
     <!--字符集过滤器-->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
@@ -34,6 +25,42 @@
         <filter-name>characterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <!--登录过滤器-->
+    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>com.lebrwcd.crm.settings.web.filter.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+
+    <!--ContextLoaderListener-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:conf/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--log4j2-->
+    <listener>
+        <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>classpath:conf/log4j2.xml</param-value>
+    </context-param>
+
+    <!--系统初始化时的监听器-->
+    <listener>
+        <listener-class>com.lebrwcd.crm.settings.web.listner.SysInitListner</listener-class>
+    </listener>
 
     <!--中央调度器-->
     <servlet>
