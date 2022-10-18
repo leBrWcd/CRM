@@ -1,2 +1,7 @@
 # CRM客户管理系统
-根据动力节点教程完成---lebrwcd
+该项目前后端不分离，传统javaweb风格
+## 后端技术
+Spring、SpringMVC、MyBatis等开源框架 jsp
+## 前端技术
+ajax、json、bootstrap渲染
+
